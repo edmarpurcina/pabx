@@ -1,5 +1,6 @@
 <?php
 session_start();
+$ramal=$_SESSION['ramal'];
 //$telefone=$_POST['telefone'];
 //echo "telefone eh: $telefone";
 
@@ -41,7 +42,7 @@ if($socket)
             echo "Authenticated to Asterisk Manager Inteface. Initiating hangup call.\n";
             // Prepare hangup request
             $hangupResquest = "Action: Hangup\r\n";
-            $hangupResquest .= "Channel: /^SIP/5235-.*$/\r\n";
+            $hangupResquest .= "Channel: /^SIP/$ramal-.*$/\r\n";
 	    $hangupResquest .= "Cause: 16\r\n";
 	    $hangupResquest .= "\n";
             // Send hangup request

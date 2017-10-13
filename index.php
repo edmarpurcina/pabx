@@ -51,9 +51,14 @@ endif;
                     <form id="login-form" class="form-horizontal" role="form" action="login.php" method="post">             
                         <div class="input-group margin-bottom-md">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input type="email" class="form-control" id="email" name="email" required placeholder="Informe seu Usuário">                                        
+                            <input type="email" class="form-control" id="usuario" name="usuario" required placeholder="Informe seu Usuário">                                        
                         </div>
-                            
+                        
+			<div class="input-group margin-bottom-md">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
+                            <input type="tel" class="form-control" id="ramal" name="ramal" required placeholder="Informe seu Ramal">
+                        </div>
+    
                         <div class="input-group margin-bottom-md">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                             <input type="password" class="form-control" id="senha" name="senha" required placeholder="Informe sua Senha">

@@ -1,7 +1,8 @@
 <?php
-
-
-
+session_start();
+$telefone=$_POST['telefone'];
+$ramal=$_SESSION['ramal'];
+echo "telefone eh: $telefone";
 // Replace with your port if not using the default.
 // If unsure check /etc/asterisk/manager.conf under [general];
 $port = 5038;
@@ -15,7 +16,7 @@ $password = "sua_senha";
 //$internalPhoneline = "203";
 
 // Context for outbound calls. See /etc/asterisk/extensions.conf if unsure.
-$context = "context";
+$context = "internal_users";
 $socket = stream_socket_client("tcp://127.0.0.1:$port");
 if($socket)
 {
@@ -39,9 +40,9 @@ if($socket)
             echo "Authenticated to Asterisk Manager Inteface. Initiating call.\n";
             // Prepare originate request
             $originateRequest = "Action: Originate\r\n";
-            $originateRequest .= "Channel: SIP/$internalPhoneline\r\n";
-            $originateRequest .= "Callerid: Click 2 Call\r\n";
-            $originateRequest .= "Exten: $target\r\n";
+            $originateRequest .= "Channel: SIP/$ramal\r\n";
+            $originateRequest .= "Callerid: $ramal\r\n";
+            $originateRequest .= "Exten: $telefone\r\n";
             $originateRequest .= "Context: $context\r\n";
             $originateRequest .= "Priority: 1\r\n";
             $originateRequest .= "Async: yes\r\n\r\n";
@@ -54,6 +55,7 @@ if($socket)
                 // Read server response
                 $originateResponse = fread($socket, 4096);
                 // Check if originate was successful
+		echo "Saida: $originateResponse";
                 if(strpos($originateResponse, 'Success') !== false)
                 {
                     echo "Call initiated, dialing.";
@@ -72,3 +74,5 @@ if($socket)
 } else {
     echo "Unable to connect to socket.";
 }
+header("Location: home.php");
+
