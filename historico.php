@@ -2,7 +2,6 @@
 session_start();
 $telefone=$_POST['telefone'];
 $ramal=$_SESSION['ramal'];
-echo "telefone eh: $telefone";
 // Replace with your port if not using the default.
 // If unsure check /etc/asterisk/manager.conf under [general];
 $port = 5038;
@@ -20,59 +19,52 @@ $context = "internal_users";
 $socket = stream_socket_client("tcp://127.0.0.1:$port");
 if($socket)
 {
-    echo "Connected to socket, sending authentication request.\n";
-    // Prepare authentication request
-    $authenticationRequest = "Action: Login\r\n";
-    $authenticationRequest .= "Username: $username\r\n";
-    $authenticationRequest .= "Secret: $password\r\n";
-    $authenticationRequest .= "Events: off\r\n\r\n";
-    // Send authentication request
-    $authenticate = stream_socket_sendto($socket, $authenticationRequest);
-    if($authenticate > 0)
-    {
-        // Wait for server response
-        usleep(200000);
-        // Read server response
-        $authenticateResponse = fread($socket, 4096);
-        // Check if authentication was successful
-        if(strpos($authenticateResponse, 'Success') !== false)
-        {
-            echo "Authenticated to Asterisk Manager Inteface. Initiating call.\n";
-            // Prepare originate request
-            $originateRequest = "Action: Originate\r\n";
-            $originateRequest .= "Channel: SIP/$ramal\r\n";
-            $originateRequest .= "Callerid: $ramal\r\n";
-            $originateRequest .= "Exten: $telefone\r\n";
-            $originateRequest .= "Context: $context\r\n";
-            $originateRequest .= "Priority: 1\r\n";
-            $originateRequest .= "Async: yes\r\n\r\n";
-            // Send originate request
-            $originate = stream_socket_sendto($socket, $originateRequest);
-            if($originate > 0)
-            {
-                // Wait for server response
-                usleep(200000);
-                // Read server response
-                $originateResponse = fread($socket, 4096);
-                // Check if originate was successful
-		echo "Saida: $originateResponse";
-                if(strpos($originateResponse, 'Success') !== false)
-                {
-                    echo "Call initiated, dialing.";
-                } else {
-                    echo "Could not initiate call.\n";
-                }
-            } else {
-                echo "Could not write call initiation request to socket.\n";
-            }
-        } else {
-            echo "Could not authenticate to Asterisk Manager Interface.\n";
-        }
-    } else {
-        echo "Could not write authentication request to socket.\n";
-    }
+	echo "Conectando ao socket, enviando autenticacao.\n";
+	// Prepare authentication request
+	$authenticationRequest = "Action: Login\r\n";
+	$authenticationRequest .= "Username: $username\r\n";
+	$authenticationRequest .= "Secret: $password\r\n";
+	$authenticationRequest .= "Events: off\r\n\r\n";
+	// Send authentication request
+	$authenticate = stream_socket_sendto($socket, $authenticationRequest);
+	if($authenticate > 0)
+	{
+		// Wait for server response
+		usleep(200000);
+		// Read server response
+		$authenticateResponse = fread($socket, 4096);
+		// Check if authentication was successful
+		if(strpos($authenticateResponse, 'Success') !== false)
+		{
+			echo "Autenticado ao Manager do asterisk, enviando solicitacao de channels\n";
+			// Prepare originate request
+			$channelsRequest = "Action: CoreShowChannels\r\n";
+			$channelsRequest .= "\n";
+			// Send originate request
+			$channels = stream_socket_sendto($socket, $channelsRequest);
+			if($channels > 0)
+			{
+				// Wait for server response
+				usleep(200000);
+				// Read server response
+				$channelsResponse = fread($socket, 4096);
+				// Check if originate was successful
+				echo "|| $channelsResponse ||";
+				if(strpos($channelsResponse, 'Success') !== false)
+				{
+					echo strpos($channelsResponse,'5235')."\n";
+					echo "Solicitacao finalizada \n";
+				}
+			} else {
+				echo "Could not write call initiation request to socket.\n";
+			}
+		} else {
+			echo "Could not authenticate to Asterisk Manager Interface.\n";
+		}
+	} else {
+		echo "Could not write authentication request to socket.\n";
+	}
 } else {
-    echo "Unable to connect to socket.";
+	echo "Unable to connect to socket.";
 }
-header("Location: home.php");
 
