@@ -53,7 +53,7 @@ include "verifica_sessao.php";
                     <div class="pannel-body padding-top-md">
 			<div id="login-alert" class="alert  col-sm-12">
                         <span class="glyphiconcons-iphone-transfer"></span>
-                        <span id="historico"></span>
+                        <span id="channels"></span>
                     </div>
                     </div>
                </div>
@@ -61,6 +61,6 @@ include "verifica_sessao.php";
         </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <script src="js/custom.js"></script> 
+    <script src="js/channels.js"></script> 
 </body>
 </html>
