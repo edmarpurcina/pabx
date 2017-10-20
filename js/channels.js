@@ -1,36 +1,19 @@
-$('document').ready(function(){
+// Função responsável por atualizar as frases
+function atualizar(){
+        // Fazendo requisição AJAX
+        $.post('channels.php', function (response) {
+         // Exibindo frase
+        $('#channels').html('<strong>' + response.channels + '</strong>' );
 
-	$("#btn-login").click(function(){
-		var data = $(function response()).serialize();
-			
-		$.ajax({
-			type : 'POST',
-			url  : 'channels.php',
-			data : data,
-			dataType: 'json',
-			beforeSend: function()
-/*			{
-				document.getElementByid("botao").onclick=function()	
-				$("#btn-login").html('Validando ...');
-			},*/
-			success :  function(response){						
-				$("#channels").html('<strong>Teste </strong>' + response.channels);
+        }, 'JSON');
+}
 
-			/*	if(response.codigo == "1"){	
-					$("#btn-login").html('Entrar');
-					$("#login-alert").css('display', 'none')
-					window.location.href = "home.php";
-					
-				}
-				else{			
-					$("#btn-login").html('Entrar');
-					$("#login-alert").css('display', 'block')
-					$("#mensagem").html('<strong>Erro! </strong>' + response.historico);
-				}*/
+// Definindo intervalo que a função será chamada
+setInterval("atualizar()", 10000);
+// Quando carregar a página
 
-		    }
-		});
-	});
-
+$(function() {
+        // Faz a primeira atualização
+        atualizar();
 });
 

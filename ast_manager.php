@@ -24,8 +24,8 @@ if($socket)
 	// Prepare authentication request
 	$authenticationRequest = "Action: Login\r\n";
 	$authenticationRequest .= "Username: $username\r\n";
-	$authenticationRequest .= "Secret: $password\r\n";
-	$authenticationRequest .= "Events: off\r\n\r\n";
+	$authenticationRequest .= "Secret: $password\r\n\r\n";
+//	$authenticationRequest .= "Events: off\r\n\r\n";
 	// Send authentication request
 	$authenticate = stream_socket_sendto($socket, $authenticationRequest);
 	if($authenticate > 0)
@@ -36,38 +36,10 @@ if($socket)
 		$authenticateResponse = fread($socket, 4096);
 		// Check if authentication was successful
 		if(strpos($authenticateResponse, 'Success') !== false)
-		{
-//			echo "Autenticado ao Manager do asterisk, enviando solicitacao de channels\n";
-			// Prepare originate request
-			$channelsRequest = "Action: CoreShowChannels\r\n";
-			$channelsRequest .= "\n";
-			
-			$channels = stream_socket_sendto($socket, $channelsRequest);
-			if($channels > 0)
-			{
-				// Wait for server response
-				usleep(200000);
-				// Read server response
-				$channelsResponse = fread($socket, 4096);
-				// Check if originate was successful
-//				echo "|| $channelsResponse ||";
-				$retorno = array('channels' => $channelsResponse);
-				echo json_encode($retorno);
-				if(strpos($channelsResponse, 'Success') !== false)
-				{
-//					echo strpos($channelsResponse,'5235')."\n";
-//					echo "Solicitacao finalizada \n";
-				}
-			} else {
-//				echo "Could not write call initiation request to socket.\n";
-			}
-		} else {
-//			echo "Could not authenticate to Asterisk Manager Interface.\n";
+				echo "Could not authenticate to Asterisk Manager Interface.\n";
 		}
-	} else {
-//		echo "Could not write authentication request to socket.\n";
 	}
-} else {
-//	echo "Unable to connect to socket.";
+ else {
+		echo "Could not write authentication request to socket.\n";
 }
 

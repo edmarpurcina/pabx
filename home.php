@@ -14,6 +14,10 @@ include "verifica_sessao.php";
 	margin-bottom: 25px;
 }
 </style>
+
+</script>
+
+
 </head>
 <body>   
     <div class="container">    
@@ -48,19 +52,20 @@ include "verifica_sessao.php";
                </div>
                <div class="panel panel-primary margin-top-md">
                     <div class="panel-heading">
-                        <div class="panel-title">Hisotrico</div>
+                        <div class="panel-title">Historico</div>
                     </div>
                     <div class="pannel-body padding-top-md">
 			<div id="login-alert" class="alert  col-sm-12">
-                        <span class="glyphiconcons-iphone-transfer"></span>
-                        <span id="channels"></span>
-                    </div>
+        		<span class="glyphiconcons-iphone-transfer"></span>
+                        <span id="channels"></div>
+			    			
+                    	</div>
                     </div>
                </div>
 	   </div>  
         </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <script src="js/channels.js"></script> 
+    <script src="js/channels.js"></script>
 </body>
 </html>
